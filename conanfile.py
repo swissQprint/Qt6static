@@ -10,7 +10,7 @@ import re
 
 class Qt6Static(ConanFile):
     name = "qt6static"
-    user = "sqp"
+    user = "3rdparty"
     qt_version = os.environ.get("CI_COMMIT_TAG", "v6.8.0")  # Minimum version is v6.8.0, lower versions use a different configure.bat
     license = "proprietary"
     author = "Qt Company Ltd."
