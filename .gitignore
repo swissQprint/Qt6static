@@ -1,0 +1,4 @@
+.vscode/
+.ruff-cache/
+gitinfo.json
+ruff.toml

@@ -1,0 +1,6 @@
+{
+    "name": "Qt6 static",
+    "description": "The Qt framework contains a comprehensive set of highly intuitive and modularized C++ library classes and is loaded with APIs to simplify your application development.",
+    "license": "This Software uses Qt Framework Version $CONAN_VERSION$ under the terms of GPLv3 license.",
+    "licensefile": "qt.static.license"
+}

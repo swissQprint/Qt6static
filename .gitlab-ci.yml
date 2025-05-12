@@ -1,0 +1,17 @@
+stages:
+  - package
+
+pkg_win64_msvc144:
+  stage: package
+  tags:
+    - cmake
+    - conan2
+    - msvc144
+    - powershell
+    - windows
+    - x86_64
+  script:
+    - conan create . -u -s build_type=Release --version=$CI_COMMIT_TAG
+    - conan upload qt6static -r=inhouse -c
+  rules:
+    - if: '$CI_COMMIT_TAG'
