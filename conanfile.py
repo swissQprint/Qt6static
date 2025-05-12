@@ -96,9 +96,9 @@ class Qt6Static(ConanFile):
         cmake = CMake(self)
         cmake.install()
 
-        copy(self, "*", src=os.path.join(f"{self.source_folder}", "qt-install"), dst=self.package_folder, keep_path=True)
         copy(self, "config.summary", src=self.source_folder, dst=os.path.join(f"{self.source_folder}", "qt-install"), keep_path=True)
         copy(self, "qt-static-license.json", src=self.source_folder, dst=os.path.join(f"{self.package_folder}", "license"), keep_path=False)
+        copy(self, "*", src=os.path.join(f"{self.source_folder}", "qt-install"), dst=self.package_folder, keep_path=True)
 
     def copyright_from_file(self, copyright_file_path: str) -> str:
         copyright_string = ""
