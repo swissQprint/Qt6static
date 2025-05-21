@@ -22,8 +22,8 @@ class Qt6Static(ConanFile):
     default_options = {"shared": False}
     exports_sources = ["qt-static-license.json"]
 
-    def requirements(self):
-        self.requires("openssl/3.1.8@3rdparty")  # type: ignore[reportOptionalCall]
+    def set_version(self):
+        self.version = self.qt_version.replace("v", "")
 
     def source(self):
         git = Git(self, "qt-source")
@@ -47,35 +47,27 @@ class Qt6Static(ConanFile):
         if not self.source_folder:
             raise ValueError("source_folder is not set")
         os.chdir(self.source_folder)
-        openssl_dep_root = self.dependencies.host["openssl"]
-        openssl_dep_root = openssl_dep_root.package_folder.replace("\\", "/")
-        openssl_dep_root_path = f"'{openssl_dep_root}'"
-        openssl_include = f"'{openssl_dep_root}/include'"
+        build_type = str(self.settings.build_type).lower() if self.settings.build_type else "release"  # type: ignore
+        print(f"Build type: {build_type}")
+
         # Possible arguments are listed in qtbase/config_help.txt
         self.run(
             f"{self.source_folder}/qt-source/configure.bat "
             "-init-submodules -submodules qtbase "
             "-static "
-            "-release "
+            f"-{build_type} "
+            f"-prefix {self.source_folder}/qt-install "
             "-gui "
             "-widgets "
-            f"-prefix {self.source_folder}/qt-install "
-            f"-openssl-linked "
+            "-schannel "
+            "-no-openssl "
             "-qt-zlib "
             "-qt-pcre "
             "-qt-libpng "
             "-qt-libjpeg "
             "-no-opengl "
-            "-nomake examples "
-            "-nomake tests "
-            # "-nomake tools " # not yet implemented as of 6.8.X / 6.9.0
             "-platform win32-msvc "
             "-cmake-generator Ninja "
-            "-- "
-            f"-DOPENSSL_ROOT_DIR={openssl_dep_root_path} "
-            f"-DOPENSSL_INCLUDE_DIR={openssl_include} "
-            f"-DOPENSSL_USE_STATIC_LIBS=TRUE "
-            f"-DOPENSSL_MSVC_STATIC_RT=TRUE "
         )
         print("Config summary:")
         config_summary_path = f"{self.source_folder}/config.summary"
@@ -97,8 +89,8 @@ class Qt6Static(ConanFile):
         cmake.install()
 
         copy(self, "config.summary", src=self.source_folder, dst=os.path.join(f"{self.source_folder}", "qt-install"), keep_path=True)
-        copy(self, "qt-static-license.json", src=self.source_folder, dst=os.path.join(f"{self.package_folder}", "license"), keep_path=False)
         copy(self, "*", src=os.path.join(f"{self.source_folder}", "qt-install"), dst=self.package_folder, keep_path=True)
+        copy(self, "qt-static-license.json", src=self.source_folder, dst=os.path.join(f"{self.package_folder}", "license"), keep_path=False)
 
     def copyright_from_file(self, copyright_file_path: str) -> str:
         copyright_string = ""
