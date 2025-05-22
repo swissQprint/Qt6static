@@ -36,7 +36,7 @@ Before building, ensure you have the following installed:
 
 
 ## License
-The Qt6static project is licensed under the Qt License.
+The Qt6static project is licensed under the Qt License (GPL v3).
 
 ## Additional documentation
 
