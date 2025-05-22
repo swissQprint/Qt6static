@@ -28,7 +28,7 @@ class Qt6Static(ConanFile):
     def source(self):
         git = Git(self, "qt-source")
         git.clone(
-            url="https://code.qt.io/qt/qt5.git",
+            url="https://github.com/swissQprint/qt5.git",
             target=".",
         )
         git.checkout(f"{self.qt_version}")
